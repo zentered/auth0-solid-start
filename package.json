@@ -1,0 +1,66 @@
+{
+  "name": "auth0-solid-start",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "homepage": "https://github.com/zentered/auth0-solid-start#readme",
+  "bugs": {
+    "url": "https://github.com/zentered/auth0-solid-start/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zentered/auth0-solid-start.git"
+  },
+  "license": "MIT",
+  "author": "Zentered <hi@zentered.co> (https://zentered.co)",
+  "contributors": [
+    "Patrick Heneise (https://github.com/PatrickHeneise)"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "solid": "./dist/index.jsx"
+    }
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "rollup -c",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "auth0-js": "^9.19.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.19.0",
+    "@babel/preset-env": "^7.19.0",
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-node-resolve": "^14.0.0",
+    "babel-preset-solid": "^1.5.4",
+    "dotenv": "^16.0.2",
+    "eslint": "^8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-json": "^3.1.0",
+    "eslint-plugin-markdown": "^3.0.0",
+    "eslint-plugin-solid": "^0.7.1",
+    "husky": "^8.0.1",
+    "is-ci": "^3.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.79.0",
+    "rollup-plugin-filesize": "^9.1.2"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.5.0"
+  },
+  "engines": {
+    "node": "^16||^18"
+  }
+}
