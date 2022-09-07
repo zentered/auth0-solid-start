@@ -41,7 +41,7 @@ export default async function (request) {
   if (jsonAuthToken?.access_token && jsonAuthToken.access_token !== undefined) {
     headers.append(
       'Set-Cookie',
-      `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/;`
+      `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/; com.auth0.auth.idToken=${jsonAuthToken.id_token} expires=${expires}; Path=/;`
     )
   }
 

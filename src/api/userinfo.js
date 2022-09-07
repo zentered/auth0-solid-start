@@ -1,5 +1,4 @@
 async function auth0UserInfo(accessToken) {
-  console.log('requesting userinfo')
   const endpoint = new URL(`https://${process.env.VITE_AUTH0_DOMAIN}/userinfo`)
 
   const userInfo = await fetch(endpoint, {
