@@ -1,6 +1,6 @@
 {
   "name": "@zentered/auth0-solid-start",
-  "version": "0.0.1-dev.0",
+  "version": "0.0.1-dev.1",
   "private": false,
   "description": "Auth0 for Solid-Start",
   "keywords": [
