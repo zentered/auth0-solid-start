@@ -1,8 +1,13 @@
 {
-  "name": "auth0-solid-start",
-  "version": "1.0.0",
-  "description": "",
-  "keywords": [],
+  "name": "@zentered/auth0-solid-start",
+  "version": "0.0.4-dev",
+  "private": false,
+  "description": "Auth0 for Solid-Start",
+  "keywords": [
+    "solidjs",
+    "solid-start",
+    "auth0"
+  ],
   "homepage": "https://github.com/zentered/auth0-solid-start#readme",
   "bugs": {
     "url": "https://github.com/zentered/auth0-solid-start/issues"
@@ -20,7 +25,8 @@
   "exports": {
     ".": {
       "solid": "./dist/index.jsx"
-    }
+    },
+    "./api/*": "./dist/api/*"
   },
   "main": "dist/index.js",
   "files": [

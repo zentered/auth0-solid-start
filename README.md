@@ -8,10 +8,31 @@ This work is inspired by
 
 ## Usage
 
-In `root.tsx` to enfore authentication on all pages:
+### root.tsx
+
+In `root.tsx` to enforce authentication on all pages:
 
 ```jsx
+import { Show } from 'solid-js'
 import { useAuth0, Auth0 } from '@zentered/auth0-solid-start'
+import { ErrorBoundary, FileRoutes, Routes } from 'solid-start'
+
+const GraphQLProvider = () => {} // let's assume you want to authenticate graphql requests
+
+function Login(props) {
+  return (
+    <div>
+      <p>Sign in</p>
+      <div>
+        <div>
+          <a onClick={() => props.auth0.authorize()} type="button">
+            Log In
+          </a>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 function SiteRequiresAuth(props) {
   const cookies = useCookies()
@@ -42,16 +63,34 @@ export default function Root() {
       // organization={organization} // uncomment if you use auth0 organizations
     >
       <SiteRequiresAuth>
-        <ConfigProvider initialConfig={config}>
-          <Header />
-          <Routes>
-            <FileRoutes />
-          </Routes>
-          <Footer />
-        </ConfigProvider>
+        <Routes>
+          <FileRoutes />
+        </Routes>
       </SiteRequiresAuth>
     </Auth0>
     // ...
   )
+}
+```
+
+### API
+
+`routes/api/callback.js|ts`:
+
+```js
+import callback from '@zentered/auth0-solid-start/api/callback'
+
+export async function get({ request }) {
+  return callback(request)
+}
+```
+
+`routes/api/userinfo.js|ts`:
+
+```js
+import userinfo from '@zentered/auth0-solid-start/api/userinfo'
+
+export async function post({ request }) {
+  return userinfo(request)
 }
 ```

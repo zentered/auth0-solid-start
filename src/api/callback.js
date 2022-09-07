@@ -18,7 +18,7 @@ async function auth0FetchOAuthToken(code) {
   return authToken.json()
 }
 
-export async function get({ request }) {
+export default async function (request) {
   const url = new URL(request.url)
   const params = url.searchParams
 

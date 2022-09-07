@@ -17,7 +17,7 @@ async function auth0UserInfo(accessToken) {
   return userInfo.json()
 }
 
-export async function post({ request }) {
+export default async function (request) {
   const body = await request.json()
   const { accessToken } = body
 
