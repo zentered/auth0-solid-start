@@ -6,6 +6,10 @@ This work is inspired by
 - Sergio Xalambrí
   [remix-auth-oauth2](https://github.com/sergiodxa/remix-auth-oauth2)
 
+## Usage
+
+In `root.tsx` to enfore authentication on all pages:
+
 ```jsx
 import { useAuth0, Auth0 } from '@zentered/auth0-solid-start'
 
