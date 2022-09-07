@@ -59,7 +59,7 @@ export default function Root() {
       domain={import.meta.env.VITE_AUTH0_DOMAIN}
       clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
       audience={import.meta.env.VITE_AUTH0_AUDIENCE}
-      successRedirectUri={import.meta.env.VITE_AUTH0_REDIRECT_URI}
+      redirectUri={import.meta.env.VITE_AUTH0_REDIRECT_URI}
       // organization={organization} // uncomment if you use auth0 organizations
     >
       <SiteRequiresAuth>
