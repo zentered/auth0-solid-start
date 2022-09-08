@@ -34,15 +34,20 @@ export default async function (request) {
 
   const jsonAuthToken = await auth0FetchOAuthToken(params.get('code'))
 
-  // TODO: figure out how to set multiple cookies
   const headers = new Headers()
   const expires = new Date(Date.now() + 86400000).toUTCString()
   headers.append('Content-Type', 'text/html; charset=utf-8')
   if (jsonAuthToken?.access_token && jsonAuthToken.access_token !== undefined) {
     headers.append(
       'Set-Cookie',
-      `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/; com.auth0.auth.idToken=${jsonAuthToken.id_token} expires=${expires}; Path=/;`
+      `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/;`
     )
+
+    // TODO: figure out how to set multiple cookies
+    // headers.append(
+    //   'Set-Cookie',
+    //   `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/; com.auth0.auth.idToken=${jsonAuthToken.id_token} expires=${expires}; Path=/;`
+    // )
   }
 
   // headers.append(
