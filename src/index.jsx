@@ -33,6 +33,8 @@ export function Auth0(props) {
     webAuthnConfig.organization = props.organization.id
   }
 
+  console.log(webAuthnConfig)
+
   const webAuthn = new auth0.WebAuth(webAuthnConfig)
 
   return (
