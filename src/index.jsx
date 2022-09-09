@@ -52,7 +52,7 @@ export function Auth0(props) {
           if (!isAuthenticated()) {
             if (accessToken && accessToken !== undefined) {
               const userInfoResponse = await fetch(
-                `${import.meta.env.VITE_BASE_URL}/api/auth/userinfo`,
+                `${import.meta.env.VITE_BASE_URL}/auth/userinfo`,
                 {
                   method: 'POST',
                   body: JSON.stringify({ accessToken })
