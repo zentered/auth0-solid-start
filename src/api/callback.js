@@ -52,7 +52,7 @@ export default async function (request) {
   const expires = new Date(Date.now() + 86400000).toUTCString()
   headers.append('Content-Type', 'text/html; charset=utf-8')
   if (jsonAuthToken?.access_token && jsonAuthToken.access_token !== undefined) {
-    if (url.host.startsWith('https://')) {
+    if (url.origin.startsWith('https://')) {
       headers.append(
         'Set-Cookie',
         `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Secure; Path=/;`
