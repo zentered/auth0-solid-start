@@ -17,13 +17,15 @@ export function Auth0(props) {
     'redirectUri',
     'organization'
   ])
-  let baseUrl = import.meta.env.VITE_BASE_URL
 
   const [isAuthenticated, setIsAuthenticated] = createSignal(undefined)
   const [user, setUser] = createSignal()
   const [token, setToken] = createSignal()
   const [userId, setUserId] = createSignal()
+  const [baseUrl, setBaseUrl] = createSignal()
   const [organization, setOrganization] = createSignal()
+
+  setBaseUrl(import.meta.env.VITE_BASE_URL)
 
   const webAuthnConfig = {
     _sendTelemetry: false,
@@ -45,9 +47,11 @@ export function Auth0(props) {
   }
 
   if (import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
-    baseUrl = import.meta.env.VITE_BASE_URL.replace(
-      'https://',
-      `https://${auth0config.organization.name}.`
+    setBaseUrl(
+      import.meta.env.VITE_BASE_URL.replace(
+        'https://',
+        `https://${auth0config.organization.name}.`
+      )
     )
   }
 
@@ -69,10 +73,13 @@ export function Auth0(props) {
         async login(accessToken) {
           if (!isAuthenticated()) {
             if (accessToken && accessToken !== undefined) {
-              const userInfoResponse = await fetch(`${baseUrl}/auth/userinfo`, {
-                method: 'POST',
-                body: JSON.stringify({ accessToken })
-              })
+              const userInfoResponse = await fetch(
+                `${baseUrl()}/auth/userinfo`,
+                {
+                  method: 'POST',
+                  body: JSON.stringify({ accessToken })
+                }
+              )
               if (userInfoResponse.status === 200) {
                 const userInfo = await userInfoResponse.json()
 
