@@ -43,6 +43,7 @@ export function Auth0(props) {
     console.log(webAuthnConfig)
   }
 
+  console.log('hello')
   console.log(import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE)
   console.log(typeof import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE)
   if (import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
