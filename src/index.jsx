@@ -1,5 +1,5 @@
 import auth0 from 'auth0-js'
-import { createContext, useContext, createSignal, createMemo } from 'solid-js'
+import { createContext, useContext, createSignal, splitProps } from 'solid-js'
 
 export const Auth0Context = createContext()
 export const useAuth0 = () => useContext(Auth0Context)
@@ -10,30 +10,45 @@ export const useAuth0 = () => useContext(Auth0Context)
  * @returns
  */
 export function Auth0(props) {
-  let organization
+  const [auth0config] = splitProps(props, [
+    'domain',
+    'clientId',
+    'audience',
+    'redirectUri',
+    'organization'
+  ])
+  let baseUrl = import.meta.env.VITE_BASE_URL
 
   const [isAuthenticated, setIsAuthenticated] = createSignal(undefined)
   const [user, setUser] = createSignal()
   const [token, setToken] = createSignal()
   const [userId, setUserId] = createSignal()
-  if (props.organization) {
-    organization = createMemo(() => props.organization)
-  }
+  const [organization, setOrganization] = createSignal()
 
   const webAuthnConfig = {
     _sendTelemetry: false,
-    domain: props.domain,
-    clientID: props.clientId,
-    audience: props.audience,
-    redirectUri: props.redirectUri,
+    domain: auth0config.domain,
+    clientID: auth0config.clientId,
+    audience: auth0config.audience,
+    redirectUri: auth0config.redirectUri,
     responseType: 'code'
   }
 
-  if (organization) {
-    webAuthnConfig.organization = props.organization.id
+  if (auth0config.organization) {
+    setOrganization(auth0config.organization)
+    webAuthnConfig.organization = auth0config.organization.id
   }
 
-  console.log(webAuthnConfig)
+  if (process.env.DEBUG === 'true') {
+    console.log(webAuthnConfig)
+  }
+
+  if (process.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
+    baseUrl = import.meta.env.VITE_BASE_URL.replace(
+      'https://',
+      `https://${auth0config.organization.name}.`
+    )
+  }
 
   const webAuthn = new auth0.WebAuth(webAuthnConfig)
 
@@ -53,13 +68,10 @@ export function Auth0(props) {
         async login(accessToken) {
           if (!isAuthenticated()) {
             if (accessToken && accessToken !== undefined) {
-              const userInfoResponse = await fetch(
-                `${import.meta.env.VITE_BASE_URL}/auth/userinfo`,
-                {
-                  method: 'POST',
-                  body: JSON.stringify({ accessToken })
-                }
-              )
+              const userInfoResponse = await fetch(`${baseUrl}/auth/userinfo`, {
+                method: 'POST',
+                body: JSON.stringify({ accessToken })
+              })
               if (userInfoResponse.status === 200) {
                 const userInfo = await userInfoResponse.json()
 

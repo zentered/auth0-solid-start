@@ -1,4 +1,4 @@
-async function auth0FetchOAuthToken(code) {
+async function auth0FetchOAuthToken(code, redirectUrl) {
   const endpoint = new URL(
     `https://${process.env.VITE_AUTH0_DOMAIN}/oauth/token`
   )
@@ -8,7 +8,7 @@ async function auth0FetchOAuthToken(code) {
   formData.append('client_id', process.env.VITE_AUTH0_CLIENT_ID)
   formData.append('client_secret', process.env.AUTH0_CLIENT_SECRET)
   formData.append('code', code)
-  formData.append('redirect_uri', process.env.VITE_AUTH0_REDIRECT_URI)
+  formData.append('redirect_uri', redirectUrl)
 
   const authToken = await fetch(endpoint, {
     method: 'POST',
@@ -32,32 +32,40 @@ export default async function (request) {
     })
   }
 
-  const jsonAuthToken = await auth0FetchOAuthToken(params.get('code'))
+  let redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI
+  if (process.env.VITE_AUTH0_MULTI_TENANT_MODE) {
+    if (url.hostname.split('.').length > 0) {
+      const orgName = url.hostname.split('.')[0]
+      redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI.replace(
+        'org_id',
+        orgName
+      )
+    }
+  }
+
+  const jsonAuthToken = await auth0FetchOAuthToken(
+    params.get('code'),
+    redirectUrl
+  )
 
   const headers = new Headers()
   const expires = new Date(Date.now() + 86400000).toUTCString()
   headers.append('Content-Type', 'text/html; charset=utf-8')
   if (jsonAuthToken?.access_token && jsonAuthToken.access_token !== undefined) {
+    // TODO: figure out how to set multiple cookies
     headers.append(
       'Set-Cookie',
       `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/;`
     )
-
-    // TODO: figure out how to set multiple cookies
     // headers.append(
     //   'Set-Cookie',
-    //   `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/; com.auth0.auth.idToken=${jsonAuthToken.id_token} expires=${expires}; Path=/;`
+    //   `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/, com.auth0.auth.idToken=${jsonAuthToken.id_token} expires=${expires}; Path=/;`
     // )
   }
 
-  // headers.append(
-  //   'Set-Cookie',
-  //   `com.auth0.auth.idToken=${jsonAuthToken.id_token}`
-  // )
-
   const body = `<html>
   <head>
-    <meta http-equiv="refresh" content="0; url=${process.env.VITE_BASE_URL}" />
+    <meta http-equiv="refresh" content="0; url=${redirectUrl}" />
   </head>
   <body></body>
 </html>`
