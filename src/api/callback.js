@@ -19,7 +19,7 @@ async function auth0FetchOAuthToken(code, redirectUrl) {
 }
 
 export default async function (request) {
-  let orgName = ''
+  let baseUrl = process.env.VITE_BASE_URL
   const url = new URL(request.url)
   const params = url.searchParams
 
@@ -34,9 +34,14 @@ export default async function (request) {
   }
 
   let redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI
+  console.log(process.env.VITE_AUTH0_MULTI_TENANT_MODE)
   if (process.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
-    orgName = url.hostname.split('.')[0]
+    const orgName = url.hostname.split('.')[0]
     redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI.replace('org_id', orgName)
+    baseUrl = process.env.VITE_BASE_URL.replace(
+      'https://',
+      `https://${orgName}.`
+    )
   }
 
   const jsonAuthToken = await auth0FetchOAuthToken(
@@ -59,13 +64,7 @@ export default async function (request) {
     // )
   }
 
-  let baseUrl = process.env.VITE_BASE_URL
-  if (process.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
-    baseUrl = process.env.VITE_BASE_URL.replace(
-      'https://',
-      `https://${orgName}.`
-    )
-  }
+  console.log(baseUrl)
 
   const body = `<html>
   <head>
