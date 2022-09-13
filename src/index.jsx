@@ -39,11 +39,11 @@ export function Auth0(props) {
     webAuthnConfig.organization = auth0config.organization.id
   }
 
-  if (process.env.DEBUG === 'true') {
+  if (import.meta.env.DEBUG === 'true') {
     console.log(webAuthnConfig)
   }
 
-  if (process.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
+  if (import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
     baseUrl = import.meta.env.VITE_BASE_URL.replace(
       'https://',
       `https://${auth0config.organization.name}.`

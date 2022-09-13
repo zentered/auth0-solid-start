@@ -6,6 +6,10 @@ This work is inspired by
 - Sergio Xalambrí
   [remix-auth-oauth2](https://github.com/sergiodxa/remix-auth-oauth2)
 
+## Multi Tenant Mode
+
+Set `VITE_AUTH0_MULTI_TENANT_MODE=true` in `.env`
+
 ## Usage
 
 ### root.tsx
