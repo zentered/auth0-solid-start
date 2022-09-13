@@ -19,6 +19,7 @@ async function auth0FetchOAuthToken(code, redirectUrl) {
 }
 
 export default async function (request) {
+  let orgName = ''
   const url = new URL(request.url)
   const params = url.searchParams
 
@@ -34,7 +35,7 @@ export default async function (request) {
 
   let redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI
   if (process.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
-    const orgName = url.hostname.split('.')[0]
+    orgName = url.hostname.split('.')[0]
     redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI.replace('org_id', orgName)
   }
 
@@ -58,9 +59,17 @@ export default async function (request) {
     // )
   }
 
+  let baseUrl = process.env.VITE_BASE_URL
+  if (process.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
+    baseUrl = process.env.VITE_BASE_URL.replace(
+      'https://',
+      `https://${orgName}.`
+    )
+  }
+
   const body = `<html>
   <head>
-    <meta http-equiv="refresh" content="0; url=${redirectUrl}" />
+    <meta http-equiv="refresh" content="0; url=${baseUrl}" />
   </head>
   <body></body>
 </html>`
