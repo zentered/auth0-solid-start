@@ -33,14 +33,9 @@ export default async function (request) {
   }
 
   let redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI
-  if (process.env.VITE_AUTH0_MULTI_TENANT_MODE) {
-    if (url.hostname.split('.').length > 0) {
-      const orgName = url.hostname.split('.')[0]
-      redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI.replace(
-        'org_id',
-        orgName
-      )
-    }
+  if (process.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
+    const orgName = url.hostname.split('.')[0]
+    redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI.replace('org_id', orgName)
   }
 
   const jsonAuthToken = await auth0FetchOAuthToken(
