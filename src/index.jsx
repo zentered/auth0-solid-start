@@ -41,10 +41,13 @@ export function Auth0(props) {
     webAuthnConfig.organization = auth0config.organization.id
   }
 
-  if (import.meta.env.DEBUG === 'true') {
+  if (import.meta.env.VITE_DEBUG === 'true') {
     console.log(webAuthnConfig)
-    console.log(import.meta.env)
   }
+  console.log(import.meta.env)
+  console.log(baseUrl())
+  console.log(import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE)
+  console.log(typeof import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE)
 
   if (import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
     setBaseUrl(
