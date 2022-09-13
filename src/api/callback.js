@@ -54,7 +54,7 @@ export default async function (request) {
   if (jsonAuthToken?.access_token && jsonAuthToken.access_token !== undefined) {
     headers.append(
       'Set-Cookie',
-      `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Domain=${url.origin}; SameSite=Lax; Secure; Path=/;`
+      `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Secure; Path=/;`
     )
 
     // TODO: figure out how to set multiple cookies
