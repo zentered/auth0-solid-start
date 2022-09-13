@@ -34,7 +34,6 @@ export default async function (request) {
   }
 
   let redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI
-  console.log(process.env.VITE_AUTH0_MULTI_TENANT_MODE)
   if (process.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
     const orgName = url.hostname.split('.')[0]
     redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI.replace('org_id', orgName)
@@ -53,18 +52,24 @@ export default async function (request) {
   const expires = new Date(Date.now() + 86400000).toUTCString()
   headers.append('Content-Type', 'text/html; charset=utf-8')
   if (jsonAuthToken?.access_token && jsonAuthToken.access_token !== undefined) {
+    if (url.host.startsWith('https://')) {
+      headers.append(
+        'Set-Cookie',
+        `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Secure; Path=/;`
+      )
+    } else {
+      headers.append(
+        'Set-Cookie',
+        `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/;`
+      )
+    }
+
     // TODO: figure out how to set multiple cookies
-    headers.append(
-      'Set-Cookie',
-      `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/;`
-    )
     // headers.append(
     //   'Set-Cookie',
     //   `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/, com.auth0.auth.idToken=${jsonAuthToken.id_token} expires=${expires}; Path=/;`
     // )
   }
-
-  console.log(baseUrl)
 
   const body = `<html>
   <head>
