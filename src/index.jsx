@@ -42,12 +42,12 @@ export function Auth0(props) {
   }
 
   if (import.meta.env.VITE_DEBUG === 'true') {
+    console.log('auth0 baseUrl: ', baseUrl())
+    console.log(
+      `auth0 multi-tenant-mode: ${import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE}`
+    )
     console.log(webAuthnConfig)
   }
-  console.log(import.meta.env)
-  console.log(baseUrl())
-  console.log(import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE)
-  console.log(typeof import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE)
 
   if (import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
     setBaseUrl(
