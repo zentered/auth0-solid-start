@@ -1,3 +1,20 @@
+import { createCookieSessionStorage } from 'solid-start/session'
+
+const sessionSecret = process.env.VITE_SESSION_SECRET || 'supersercret123'
+const storage = createCookieSessionStorage({
+  cookie: {
+    name: 'auth0-solid-session',
+    // secure doesn't work on localhost for Safari
+    // https://web.dev/when-to-use-local-https/
+    secure: !!process.env.DEV,
+    secrets: [sessionSecret],
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 60 * 60 * 24 * 30,
+    httpOnly: true
+  }
+})
+
 async function auth0FetchOAuthToken(code, redirectUrl) {
   const endpoint = new URL(
     `https://${process.env.VITE_AUTH0_DOMAIN}/oauth/token`
@@ -20,6 +37,8 @@ async function auth0FetchOAuthToken(code, redirectUrl) {
 
 export default async function (request) {
   let baseUrl = process.env.VITE_BASE_URL
+  const session = await storage.getSession()
+  const headers = new Headers()
   const url = new URL(request.url)
   const params = url.searchParams
 
@@ -48,21 +67,14 @@ export default async function (request) {
     redirectUrl
   )
 
-  const headers = new Headers()
-  const expires = new Date(Date.now() + 86400000).toUTCString()
-  headers.append('Content-Type', 'text/html; charset=utf-8')
-  if (jsonAuthToken?.access_token && jsonAuthToken.access_token !== undefined) {
-    headers.append(
-      'Set-Cookie',
-      `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Secure; Path=/;`
-    )
+  session.set('accessToken', jsonAuthToken.access_token)
+  session.set('idToken', jsonAuthToken.id_token)
+  session.set('scope', jsonAuthToken.scope)
+  session.set('expiresIn', jsonAuthToken.expires_in)
+  session.set('tokenType', jsonAuthToken.token_type)
 
-    // TODO: figure out how to set multiple cookies
-    // headers.append(
-    //   'Set-Cookie',
-    //   `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/, com.auth0.auth.idToken=${jsonAuthToken.id_token} expires=${expires}; Path=/;`
-    // )
-  }
+  headers.append('Content-Type', 'text/html; charset=utf-8')
+  headers.append('Set-Cookie', await storage.commitSession(session))
 
   const body = `<html>
   <head>

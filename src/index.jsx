@@ -1,14 +1,19 @@
 import auth0 from 'auth0-js'
 import { createContext, useContext, createSignal, splitProps } from 'solid-js'
+// import { createServerData$ } from 'solid-start/server'
+// import { parseCookie } from 'solid-start/session/cookie'
+// import { unsign} from 'solid-start/session/cookieSigning'
 
 export const Auth0Context = createContext()
 export const useAuth0 = () => useContext(Auth0Context)
 
-/**
- *
- * @param {*} props
- * @returns
- */
+// const sessionSecret = import.meta.env.VITE_SESSION_SECRET
+// export function routeData() {
+//   return createServerData$(async (_, { request }) => {
+//     console.log(request)
+//   })
+// }
+
 export function Auth0(props) {
   const [auth0config] = splitProps(props, [
     'domain',
@@ -60,6 +65,17 @@ export function Auth0(props) {
 
   const webAuthn = new auth0.WebAuth(webAuthnConfig)
 
+  // const cookies = isServer
+  //   ? request.headers.get('Cookie')
+  //   : document.cookie
+  // console.log(cookies)
+  // const verified = parseCookie(cookies ?? '')
+  // console.log(verified)
+
+  // const accessToken = parseCookie('auth0-solid-session', {
+  //   secret: sessionSecret
+  // })
+
   return (
     <Auth0Context.Provider
       value={{
@@ -73,24 +89,38 @@ export function Auth0(props) {
         async authorize() {
           await webAuthn.authorize()
         },
+        async getSession() {
+          // console.log(session)
+        },
         async login(accessToken) {
           if (!isAuthenticated()) {
             if (accessToken && accessToken !== undefined) {
-              const userInfoResponse = await fetch(
-                `${baseUrl()}/auth/userinfo`,
-                {
-                  method: 'POST',
-                  body: JSON.stringify({ accessToken })
-                }
-              )
-              if (userInfoResponse.status === 200) {
-                const userInfo = await userInfoResponse.json()
+              console.log(accessToken)
+              // const session = await storage.getSession()
+              // const userId = session.get('userId')
+              // if (userId || typeof userId === 'string') {
+              //   return session
+              // }
+              // const userInfoResponse = await fetch(
+              //   `${baseUrl()}/auth/userinfo`,
+              //   {
+              //     method: 'POST',
+              //     body: JSON.stringify({ accessToken })
+              //   }
+              // )
+              // if (userInfoResponse.status === 200) {
+              //   const userInfo = await userInfoResponse.json()
 
-                setIsAuthenticated(true)
-                setToken(accessToken)
-                setUser(userInfo)
-                setUserId(userInfo.sub)
-              }
+              //   setIsAuthenticated(true)
+              //   setToken(accessToken)
+              //   setUser(userInfo)
+              //   setUserId(userInfo.sub)
+
+              //   session.set('userId', userInfo.userId)
+              //   session.set('accessToken', accessToken)
+
+              //   await storage.commitSession(session)
+              // }
             } else {
               setIsAuthenticated(false)
             }

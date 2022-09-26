@@ -4,7 +4,7 @@ import filesize from 'rollup-plugin-filesize'
 
 export default [
   {
-    external: ['solid-js', 'auth0-js'],
+    external: ['auth0-js', 'solid-js', 'solid-start'],
     plugins: [
       resolve({
         extensions: ['.js', '.jsx']
