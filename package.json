@@ -24,34 +24,21 @@
   "type": "module",
   "exports": {
     ".": {
-      "solid": "./dist/index.jsx"
+      "require": "./src/index.jsx",
+      "solid": "./src/index.jsx"
     },
-    "./api/*": "./dist/api/*"
+    "./api/*": "./src/api/*"
   },
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "files": [
-    "dist"
+    "src"
   ],
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "auth0-js": "^9.19.1",
-    "solid-js": "^1.5.6",
-    "solid-start": "^0.1.0"
-  },
   "devDependencies": {
-    "@babel/core": "^7.19.1",
-    "@babel/preset-env": "^7.19.1",
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
-    "@rollup/plugin-babel": "^5.3.1",
-    "@rollup/plugin-node-resolve": "^14.1.0",
-    "babel-preset-solid": "^1.5.6",
     "dotenv": "^16.0.2",
     "eslint": "^8.24.0",
     "eslint-config-prettier": "^8.5.0",
@@ -62,12 +49,19 @@
     "is-ci": "^3.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.79.1",
-    "rollup-plugin-filesize": "^9.1.2"
+    "@solidjs/router": "^0.4.3",
+    "solid-js": "^1.5.6",
+    "solid-start": "^0.1.0"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "@solidjs/router": "^0.4.3",
+    "solid-js": "^1.5.6",
+    "solid-start": "^0.1.0"
+  },
   "engines": {
     "node": "^16||^18"
+  },
+  "dependencies": {
+    "auth0-js": "^9.19.1"
   }
 }

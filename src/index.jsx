@@ -1,18 +1,11 @@
 import auth0 from 'auth0-js'
 import { createContext, useContext, createSignal, splitProps } from 'solid-js'
-// import { createServerData$ } from 'solid-start/server'
-// import { parseCookie } from 'solid-start/session/cookie'
-// import { unsign} from 'solid-start/session/cookieSigning'
+import { isServer } from 'solid-js/web'
+import { redirect } from 'solid-start/server'
+import { storage } from './session.js'
 
 export const Auth0Context = createContext()
 export const useAuth0 = () => useContext(Auth0Context)
-
-// const sessionSecret = import.meta.env.VITE_SESSION_SECRET
-// export function routeData() {
-//   return createServerData$(async (_, { request }) => {
-//     console.log(request)
-//   })
-// }
 
 export function Auth0(props) {
   const [auth0config] = splitProps(props, [
@@ -22,15 +15,14 @@ export function Auth0(props) {
     'redirectUri',
     'organization'
   ])
+  const cookies = !isServer ? document.cookie : null
 
   const [isAuthenticated, setIsAuthenticated] = createSignal(undefined)
   const [user, setUser] = createSignal()
-  const [token, setToken] = createSignal()
+  const [accessToken, setAccessToken] = createSignal()
+  const [idToken, setIdToken] = createSignal()
   const [userId, setUserId] = createSignal()
-  const [baseUrl, setBaseUrl] = createSignal()
   const [organization, setOrganization] = createSignal()
-
-  setBaseUrl(import.meta.env.VITE_BASE_URL)
 
   const webAuthnConfig = {
     _sendTelemetry: false,
@@ -46,35 +38,7 @@ export function Auth0(props) {
     webAuthnConfig.organization = auth0config.organization.id
   }
 
-  if (import.meta.env.VITE_DEBUG === 'true') {
-    console.log('auth0 baseUrl: ', baseUrl())
-    console.log(
-      `auth0 multi-tenant-mode: ${import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE}`
-    )
-    console.log(webAuthnConfig)
-  }
-
-  if (import.meta.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
-    setBaseUrl(
-      import.meta.env.VITE_BASE_URL.replace(
-        'https://',
-        `https://${auth0config.organization.name}.`
-      )
-    )
-  }
-
   const webAuthn = new auth0.WebAuth(webAuthnConfig)
-
-  // const cookies = isServer
-  //   ? request.headers.get('Cookie')
-  //   : document.cookie
-  // console.log(cookies)
-  // const verified = parseCookie(cookies ?? '')
-  // console.log(verified)
-
-  // const accessToken = parseCookie('auth0-solid-session', {
-  //   secret: sessionSecret
-  // })
 
   return (
     <Auth0Context.Provider
@@ -85,46 +49,30 @@ export function Auth0(props) {
         organization,
         user,
         userId,
-        token,
+        idToken,
+        accessToken,
         async authorize() {
           await webAuthn.authorize()
         },
-        async getSession() {
-          // console.log(session)
-        },
-        async login(accessToken) {
-          if (!isAuthenticated()) {
-            if (accessToken && accessToken !== undefined) {
-              console.log(accessToken)
-              // const session = await storage.getSession()
-              // const userId = session.get('userId')
-              // if (userId || typeof userId === 'string') {
-              //   return session
-              // }
-              // const userInfoResponse = await fetch(
-              //   `${baseUrl()}/auth/userinfo`,
-              //   {
-              //     method: 'POST',
-              //     body: JSON.stringify({ accessToken })
-              //   }
-              // )
-              // if (userInfoResponse.status === 200) {
-              //   const userInfo = await userInfoResponse.json()
-
-              //   setIsAuthenticated(true)
-              //   setToken(accessToken)
-              //   setUser(userInfo)
-              //   setUserId(userInfo.sub)
-
-              //   session.set('userId', userInfo.userId)
-              //   session.set('accessToken', accessToken)
-
-              //   await storage.commitSession(session)
-              // }
-            } else {
-              setIsAuthenticated(false)
-            }
+        async login() {
+          const session = await storage.getSession(cookies)
+          if (session.has('userId') && session.has('accessToken')) {
+            setAccessToken(session.get('accessToken'))
+            setIdToken(session.get('idToken'))
+            setUserId(session.get('userId'))
+            setUser(session.get('userInfo'))
+            setIsAuthenticated(true)
+          } else {
+            setIsAuthenticated(false)
           }
+        },
+        async logout() {
+          const session = await storage.getSession(cookies)
+          return redirect('/login', {
+            headers: {
+              'Set-Cookie': await storage.destroySession(session)
+            }
+          })
         }
       }}
     >
