@@ -1,36 +1,41 @@
 import auth0 from 'auth0-js'
-import { createContext, useContext, createSignal, createMemo } from 'solid-js'
+import { createContext, useContext, createSignal, splitProps } from 'solid-js'
+import { isServer } from 'solid-js/web'
+import { redirect } from 'solid-start/server'
+import { storage } from './session.js'
 
 export const Auth0Context = createContext()
 export const useAuth0 = () => useContext(Auth0Context)
 
-/**
- *
- * @param {*} props
- * @returns
- */
 export function Auth0(props) {
-  let organization
+  const [auth0config] = splitProps(props, [
+    'domain',
+    'clientId',
+    'audience',
+    'redirectUri',
+    'organization'
+  ])
+  const cookies = !isServer ? document.cookie : null
 
   const [isAuthenticated, setIsAuthenticated] = createSignal(undefined)
   const [user, setUser] = createSignal()
-  const [token, setToken] = createSignal()
+  const [accessToken, setAccessToken] = createSignal()
+  const [idToken, setIdToken] = createSignal()
   const [userId, setUserId] = createSignal()
-  if (props.organization) {
-    organization = createMemo(() => props.organization)
-  }
+  const [organization, setOrganization] = createSignal()
 
   const webAuthnConfig = {
     _sendTelemetry: false,
-    domain: props.domain,
-    clientID: props.clientId,
-    audience: props.audience,
-    redirectUri: props.redirectUri,
+    domain: auth0config.domain,
+    clientID: auth0config.clientId,
+    audience: auth0config.audience,
+    redirectUri: auth0config.redirectUri,
     responseType: 'code'
   }
 
-  if (organization) {
-    webAuthnConfig.organization = props.organization.id
+  if (auth0config.organization) {
+    setOrganization(auth0config.organization)
+    webAuthnConfig.organization = auth0config.organization.id
   }
 
   const webAuthn = new auth0.WebAuth(webAuthnConfig)
@@ -44,32 +49,30 @@ export function Auth0(props) {
         organization,
         user,
         userId,
-        token,
+        idToken,
+        accessToken,
         async authorize() {
           await webAuthn.authorize()
         },
-        async login(accessToken) {
-          if (!isAuthenticated()) {
-            if (accessToken && accessToken !== undefined) {
-              const userInfoResponse = await fetch(
-                `${import.meta.env.VITE_BASE_URL}/auth/userinfo`,
-                {
-                  method: 'POST',
-                  body: JSON.stringify({ accessToken })
-                }
-              )
-              if (userInfoResponse.status === 200) {
-                const userInfo = await userInfoResponse.json()
-
-                setIsAuthenticated(true)
-                setToken(accessToken)
-                setUser(userInfo)
-                setUserId(userInfo.sub)
-              }
-            } else {
-              setIsAuthenticated(false)
-            }
+        async login() {
+          const session = await storage.getSession(cookies)
+          if (session.has('userId') && session.has('accessToken')) {
+            setAccessToken(session.get('accessToken'))
+            setIdToken(session.get('idToken'))
+            setUserId(session.get('userId'))
+            setUser(session.get('userInfo'))
+            setIsAuthenticated(true)
+          } else {
+            setIsAuthenticated(false)
           }
+        },
+        async logout() {
+          const session = await storage.getSession(cookies)
+          return redirect('/login', {
+            headers: {
+              'Set-Cookie': await storage.destroySession(session)
+            }
+          })
         }
       }}
     >

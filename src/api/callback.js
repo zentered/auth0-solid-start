@@ -1,4 +1,23 @@
-async function auth0FetchOAuthToken(code) {
+import { storage } from '../session.js'
+
+async function auth0UserInfo(accessToken) {
+  const endpoint = new URL(`https://${process.env.VITE_AUTH0_DOMAIN}/userinfo`)
+
+  const userInfo = await fetch(endpoint, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  })
+
+  if (userInfo.status !== 200) {
+    return undefined
+  }
+
+  return userInfo.json()
+}
+
+async function auth0FetchOAuthToken(code, redirectUrl) {
   const endpoint = new URL(
     `https://${process.env.VITE_AUTH0_DOMAIN}/oauth/token`
   )
@@ -8,7 +27,7 @@ async function auth0FetchOAuthToken(code) {
   formData.append('client_id', process.env.VITE_AUTH0_CLIENT_ID)
   formData.append('client_secret', process.env.AUTH0_CLIENT_SECRET)
   formData.append('code', code)
-  formData.append('redirect_uri', process.env.VITE_AUTH0_REDIRECT_URI)
+  formData.append('redirect_uri', redirectUrl)
 
   const authToken = await fetch(endpoint, {
     method: 'POST',
@@ -18,7 +37,10 @@ async function auth0FetchOAuthToken(code) {
   return authToken.json()
 }
 
-export default async function (request) {
+export default async function get(request) {
+  let baseUrl = process.env.VITE_BASE_URL
+  const session = await storage.getSession()
+  const headers = new Headers()
   const url = new URL(request.url)
   const params = url.searchParams
 
@@ -32,32 +54,42 @@ export default async function (request) {
     })
   }
 
-  const jsonAuthToken = await auth0FetchOAuthToken(params.get('code'))
-
-  const headers = new Headers()
-  const expires = new Date(Date.now() + 86400000).toUTCString()
-  headers.append('Content-Type', 'text/html; charset=utf-8')
-  if (jsonAuthToken?.access_token && jsonAuthToken.access_token !== undefined) {
-    headers.append(
-      'Set-Cookie',
-      `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/;`
+  let redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI
+  if (process.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
+    const orgName = url.hostname.split('.')[0]
+    redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI.replace('org_id', orgName)
+    baseUrl = process.env.VITE_BASE_URL.replace(
+      'https://',
+      `https://${orgName}.`
     )
-
-    // TODO: figure out how to set multiple cookies
-    // headers.append(
-    //   'Set-Cookie',
-    //   `com.auth0.auth.accessToken=${jsonAuthToken.access_token}; expires=${expires}; Path=/; com.auth0.auth.idToken=${jsonAuthToken.id_token} expires=${expires}; Path=/;`
-    // )
   }
 
-  // headers.append(
-  //   'Set-Cookie',
-  //   `com.auth0.auth.idToken=${jsonAuthToken.id_token}`
-  // )
+  const jsonAuthToken = await auth0FetchOAuthToken(
+    params.get('code'),
+    redirectUrl
+  )
+
+  const userInfo = await auth0UserInfo(jsonAuthToken.access_token)
+  if (userInfo === undefined) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401
+    })
+  }
+
+  session.set('accessToken', jsonAuthToken.access_token)
+  session.set('idToken', jsonAuthToken.id_token)
+  session.set('scope', jsonAuthToken.scope)
+  session.set('expiresIn', jsonAuthToken.expires_in)
+  session.set('tokenType', jsonAuthToken.accessToken_type)
+  session.set('userInfo', userInfo)
+  session.set('userId', userInfo.sub)
+
+  headers.append('Content-Type', 'text/html; charset=utf-8')
+  headers.append('Set-Cookie', await storage.commitSession(session))
 
   const body = `<html>
   <head>
-    <meta http-equiv="refresh" content="0; url=${process.env.VITE_BASE_URL}" />
+    <meta http-equiv="refresh" content="0; url=${baseUrl}" />
   </head>
   <body></body>
 </html>`
