@@ -49,6 +49,14 @@ Set `VITE_AUTH0_MULTI_TENANT_MODE=true` in `.env`
 
 ## Usage
 
+### Environment Variables
+
+See [.env.example](./env.example)
+
+- `VITE_AUTH0_MULTI_TENANT_MODE` requires the Auth0 Organization setup
+- `VITE_AUTH0_OFFLINE_ACCESS` requires the Auth0 API to be configured with
+  offline access
+
 ### vite.config.ts/js
 
 There's an issue with vite throwing `process` is undefined errors when the
