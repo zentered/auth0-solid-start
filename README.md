@@ -49,6 +49,18 @@ Set `VITE_AUTH0_MULTI_TENANT_MODE=true` in `.env`
 
 ## Usage
 
+### vite.config.ts/js
+
+There's an issue with vite throwing `process` is undefined errors when the
+session is loaded on the client. To fix this, add the following to your
+`vite.config.ts/js`:
+
+```js
+define: {
+    'process.env': process.env
+  },
+```
+
 ### root.jsx / .tsx
 
 In `root.tsx` to enforce authentication on all pages:

@@ -69,7 +69,16 @@ export default async function get(request) {
     redirectUrl
   )
 
+  if (process.env.DEBUG === 'true') {
+    console.log('auth0FetchOAuthToken')
+    console.log(jsonAuthToken)
+  }
+
   const userInfo = await auth0UserInfo(jsonAuthToken.access_token)
+  if (process.env.DEBUG === 'true') {
+    console.log('auth0UserInfo')
+    console.log(userInfo)
+  }
   if (userInfo === undefined) {
     return new Response(JSON.stringify({ error: 'unauthorized' }), {
       status: 401
