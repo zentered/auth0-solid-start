@@ -23,18 +23,18 @@ async function auth0FetchOAuthToken(code, state, redirectUrl, organization) {
     `https://${process.env.VITE_AUTH0_DOMAIN}/oauth/token`
   )
 
-  const formData = new URLSearchParams()
   const scopes = ['openid', 'profile', 'email']
+  if (process.env.VITE_AUTH0_OFFLINE_ACCESS === 'true') {
+    scopes.push('offline_access')
+  }
+
+  const formData = new URLSearchParams()
   formData.append('grant_type', 'authorization_code')
   formData.append('client_id', process.env.VITE_AUTH0_CLIENT_ID)
   formData.append('client_secret', process.env.AUTH0_CLIENT_SECRET)
   formData.append('code', code)
   formData.append('state', state)
   formData.append('redirect_uri', redirectUrl)
-
-  if (process.env.VITE_AUTH0_OFFLINE_ACCESS === 'true') {
-    scopes.push('offline_access')
-  }
   formData.append('scope', scopes.join(' '))
 
   if (organization) {

@@ -24,12 +24,18 @@ export function Auth0(props) {
   const [userId, setUserId] = createSignal()
   const [organization, setOrganization] = createSignal()
 
+  const scopes = ['openid', 'profile', 'email']
+  if (process.env.VITE_AUTH0_OFFLINE_ACCESS === 'true') {
+    scopes.push('offline_access')
+  }
+
   const webAuthnConfig = {
     _sendTelemetry: false,
     domain: auth0config.domain,
     clientID: auth0config.clientId,
     audience: auth0config.audience,
     redirectUri: auth0config.redirectUri,
+    scopes: scopes.join(' '),
     responseType: 'code'
   }
 
