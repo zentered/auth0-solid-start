@@ -23,7 +23,7 @@ async function auth0FetchOAuthToken(code, state, redirectUrl, organization) {
     `https://${process.env.VITE_AUTH0_DOMAIN}/oauth/token`
   )
 
-  const scopes = ['openid', 'profile', 'email']
+  const scopes = ['openid', 'profile']
   if (process.env.VITE_AUTH0_OFFLINE_ACCESS === 'true') {
     scopes.push('offline_access')
   }
@@ -136,9 +136,11 @@ export default async function get(request) {
   }
 
   session.set('accessToken', jsonAuthToken.access_token)
+  if (jsonAuthToken.refresh_token) {
+    session.set('refreshToken', jsonAuthToken.refresh_token)
+  }
   session.set('idToken', jsonAuthToken.id_token)
   session.set('scope', jsonAuthToken.scope)
-  session.set('expiresIn', jsonAuthToken.expires_in)
   session.set('tokenType', jsonAuthToken.accessToken_type)
   session.set('userInfo', userInfo)
   session.set('userId', userInfo.sub)
