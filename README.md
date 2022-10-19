@@ -98,7 +98,7 @@ function Login(props) {
 function SiteRequiresAuth(props) {
   const auth0 = useAuth0()
 
-  if (!auth0.isAuthenticated()) {
+  if (!auth0.isAuthenticated() && !isServer) {
     auth0.login()
   }
 
@@ -147,7 +147,7 @@ export default function Root() {
 ```js
 import fn from '@zentered/auth0-solid-start/api/callback'
 
-export async function get({ request }) {
+export async function GET({ request }) {
   return fn(request)
 }
 ```
