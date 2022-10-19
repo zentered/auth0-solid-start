@@ -14,7 +14,7 @@ if (import.meta && import.meta.env.VITE_SESSION_SECRET) {
 
 export const storage = createCookieSessionStorage({
   cookie: {
-    name: 'auth0-solid-session',
+    name: '__session',
     // secure doesn't work on localhost for Safari
     // https://web.dev/when-to-use-local-https/
     secure: !!process.env.DEV,
