@@ -98,7 +98,7 @@ function Login(props) {
 function SiteRequiresAuth(props) {
   const auth0 = useAuth0()
 
-  if (!auth0.isAuthenticated() && !isServer) {
+  if (!auth0.isAuthenticated()) {
     auth0.login()
   }
 
