@@ -75,6 +75,7 @@ In `root.tsx` to enforce authentication on all pages:
 
 ```jsx
 import { Show, Suspense } from 'solid-js'
+import { isServer } from 'solid-js/web'
 import { ErrorBoundary, FileRoutes, Routes } from 'solid-start'
 import { Auth0, useAuth0 } from '@zentered/auth0-solid-start'
 
@@ -151,3 +152,19 @@ export async function GET({ request }) {
   return fn(request)
 }
 ```
+
+## Development
+
+You can fork/clone this repository and link it into your working project with
+`pnpm link`:
+
+```bash
+cd auth0-solid-start
+pnpm link
+
+cd ../your-project
+pnpm link @zentered/auth0-solid-start ../../auth0-solid-start
+```
+
+Instead of using the `npm` version you're now working with a local copy. Changes
+in the `auth0-solid-start` folder _should_ restart the app.
