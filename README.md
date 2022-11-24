@@ -45,7 +45,7 @@ Multi Tenant Mode can be used with
 have to pass an organization object into the Auth0 context with an `id`. We
 recommend using the same schema as Auth0.
 
-Set `VITE_AUTH0_MULTI_TENANT_MODE=true` in `.env`
+Set `VITE_AUTH0_REWRITE_REDIRECT=true` in `.env`
 
 ## Usage
 
@@ -53,7 +53,7 @@ Set `VITE_AUTH0_MULTI_TENANT_MODE=true` in `.env`
 
 See [.env.example](./env.example)
 
-- `VITE_AUTH0_MULTI_TENANT_MODE` requires the Auth0 Organization setup
+- `VITE_AUTH0_REWRITE_REDIRECT` requires the Auth0 Organization setup
 - `VITE_AUTH0_OFFLINE_ACCESS` requires the Auth0 API to be configured with
   offline access
 

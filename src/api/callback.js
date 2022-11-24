@@ -103,7 +103,7 @@ export default async function get(request) {
   }
 
   let redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI
-  if (process.env.VITE_AUTH0_MULTI_TENANT_MODE === 'true') {
+  if (process.env.VITE_AUTH0_REWRITE_REDIRECT === 'true') {
     const orgName = url.hostname.split('.')[0]
     redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI.replace('org_id', orgName)
     baseUrl = process.env.VITE_BASE_URL.replace(
@@ -144,6 +144,8 @@ export default async function get(request) {
   session.set('tokenType', jsonAuthToken.accessToken_type)
   session.set('userInfo', userInfo)
   session.set('userId', userInfo.sub)
+  session.set('orgId', userInfo.org_id)
+  session.set('permissions', userInfo.permissions)
 
   headers.append('Content-Type', 'text/html; charset=utf-8')
   headers.append('Set-Cookie', await storage.commitSession(session))
