@@ -37,33 +37,33 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.1.0",
-    "@solidjs/router": "^0.5.0",
+    "@commitlint/cli": "^17.3.0",
+    "@commitlint/config-conventional": "^17.3.0",
+    "@solidjs/router": "^0.5.1",
     "dotenv": "^16.0.3",
-    "eslint": "^8.25.0",
+    "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-markdown": "^3.0.0",
-    "eslint-plugin-solid": "^0.7.3",
-    "husky": "^8.0.1",
+    "eslint-plugin-solid": "^0.9.1",
+    "husky": "^8.0.2",
     "is-ci": "^3.0.1",
-    "lint-staged": "^13.0.3",
-    "prettier": "^2.7.1",
-    "solid-js": "^1.5.9",
-    "solid-start": "^0.2.0"
+    "lint-staged": "^13.0.4",
+    "prettier": "^2.8.0",
+    "solid-js": "^1.6.2",
+    "solid-start": "^0.2.6"
   },
   "peerDependencies": {
-    "@solidjs/router": "^0.5.0",
-    "solid-js": "^1.5.9",
-    "solid-start": "^0.2.0"
+    "@solidjs/router": "^0.5.1",
+    "solid-js": "^1.6.2",
+    "solid-start": "^0.2.6"
   },
   "engines": {
-    "node": "^16||^18"
+    "node": ">16"
   },
   "dependencies": {
-    "auth0-js": "^9.19.1",
-    "jose": "^4.10.0"
+    "auth0-js": "^9.19.2",
+    "jose": "^4.11.1"
   },
   "release": {
     "branches": [
