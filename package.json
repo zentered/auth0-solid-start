@@ -36,6 +36,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
+  "dependencies": {
+    "auth0-js": "^9.19.2",
+    "jose": "^4.11.1"
+  },
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.3.0",
@@ -45,29 +54,20 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-markdown": "^3.0.0",
-    "eslint-plugin-solid": "^0.8.0",
+    "eslint-plugin-solid": "^0.9.1",
     "husky": "^8.0.2",
     "is-ci": "^3.0.1",
-    "lint-staged": "^13.0.3",
+    "lint-staged": "^13.0.4",
     "prettier": "^2.8.0",
     "solid-js": "^1.6.2",
-    "solid-start": "^0.2.5"
+    "solid-start": "^0.2.6"
   },
   "peerDependencies": {
     "@solidjs/router": "^0.5.1",
     "solid-js": "^1.6.2",
-    "solid-start": "^0.2.5"
+    "solid-start": "^0.2.6"
   },
   "engines": {
-    "node": "^16||^18"
-  },
-  "dependencies": {
-    "auth0-js": "^9.19.2",
-    "jose": "^4.11.1"
-  },
-  "release": {
-    "branches": [
-      "main"
-    ]
+    "node": ">16"
   }
 }
