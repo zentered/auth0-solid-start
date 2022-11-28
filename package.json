@@ -51,12 +51,12 @@
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "solid-js": "^1.5.9",
-    "solid-start": "^0.1.8"
+    "solid-start": "^0.2.0"
   },
   "peerDependencies": {
     "@solidjs/router": "^0.5.0",
     "solid-js": "^1.5.9",
-    "solid-start": "^0.1.8"
+    "solid-start": "^0.2.0"
   },
   "engines": {
     "node": "^16||^18"
