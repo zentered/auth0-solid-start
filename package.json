@@ -36,6 +36,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
+  "dependencies": {
+    "auth0-js": "^9.19.2",
+    "jose": "^4.11.1"
+  },
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.3.0",
@@ -60,14 +69,5 @@
   },
   "engines": {
     "node": ">16"
-  },
-  "dependencies": {
-    "auth0-js": "^9.19.2",
-    "jose": "^4.11.1"
-  },
-  "release": {
-    "branches": [
-      "main"
-    ]
   }
 }
