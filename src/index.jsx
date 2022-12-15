@@ -63,6 +63,10 @@ export function Auth0(props) {
         },
         async login() {
           const session = await storage.getSession(cookies)
+          if (process.env.DEBUG) {
+            console.log('Session:')
+            console.log(session)
+          }
           if (session.has('userId') && session.has('accessToken')) {
             const jwt = session.get('accessToken')
             const JWKS = jose.createRemoteJWKSet(
@@ -80,7 +84,8 @@ export function Auth0(props) {
               setUser(session.get('userInfo'))
               setIsAuthenticated(true)
             } catch (err) {
-              if (err.name === 'JWTExpired') {
+              console.error(err)
+              if (err.name === 'JWTExpired' || err.code === 'ERR_JWT_EXPIRED') {
                 const refreshToken = session.get('refreshToken')
                 if (refreshToken) {
                   const tokens = await refresh(refreshToken)

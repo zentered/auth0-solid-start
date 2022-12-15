@@ -1,4 +1,7 @@
 export default async function refresh(refreshToken) {
+  if (process.env.DEBUG) {
+    console.log('refreshToken')
+  }
   const endpoint = new URL(
     `https://${process.env.VITE_AUTH0_DOMAIN}/oauth/token`
   )

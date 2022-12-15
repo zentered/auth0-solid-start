@@ -42,7 +42,7 @@
     ]
   },
   "dependencies": {
-    "auth0-js": "^9.19.2",
+    "auth0-js": "^9.20.0",
     "jose": "^4.11.1"
   },
   "devDependencies": {
@@ -50,22 +50,22 @@
     "@commitlint/config-conventional": "^17.3.0",
     "@solidjs/router": "^0.5.1",
     "dotenv": "^16.0.3",
-    "eslint": "^8.28.0",
+    "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-markdown": "^3.0.0",
     "eslint-plugin-solid": "^0.9.1",
     "husky": "^8.0.2",
     "is-ci": "^3.0.1",
-    "lint-staged": "^13.0.4",
-    "prettier": "^2.8.0",
-    "solid-js": "^1.6.2",
-    "solid-start": "^0.2.6"
+    "lint-staged": "^13.1.0",
+    "prettier": "^2.8.1",
+    "solid-js": "^1.6.5",
+    "solid-start": "^0.2.7"
   },
   "peerDependencies": {
     "@solidjs/router": "^0.5.1",
-    "solid-js": "^1.6.2",
-    "solid-start": "^0.2.6"
+    "solid-js": "^1.6.5",
+    "solid-start": "^0.2.7"
   },
   "engines": {
     "node": ">16"
