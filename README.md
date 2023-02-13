@@ -56,6 +56,8 @@ See [.env.example](./env.example)
 - `VITE_AUTH0_REWRITE_REDIRECT` requires the Auth0 Organization setup
 - `VITE_AUTH0_OFFLINE_ACCESS` requires the Auth0 API to be configured with
   offline access
+- `VITE_AUTH0_LOGOUT_URL` the logout url (a server-side route, ie
+  http://localhost:8080/auth/logout)
 
 ### vite.config.ts/js
 
@@ -141,7 +143,44 @@ export default function Root() {
 }
 ```
 
+### Logout
+
+The logout happens in 3 steps:
+
+1. User clicks "Sign out" and starts the process
+2. `logout` function on the Auth0 Provider is triggered that generates an
+   [auth0 logout url](https://auth0.com/docs/authenticate/login/logout/log-users-out-of-applications)
+3. Auth0 redirects back to the "logout url" which clears the session.
+
+There are two parts: the logout function in the auth0 provider and the "api"
+route (ie `/auth/logout`), see below.
+
+In any component/page where you want the "Sign out" link:
+
+```jsx
+import { useAuth0 } from '@zentered/auth0-solid-start'
+import { Link } from '@solidjs/router'
+
+export default function Component() {
+  const auth0 = useAuth0()
+  const [, logout] = createRouteAction(async () => {
+    await auth0.logout()
+  })
+
+  <Link
+    href="#"
+    class={`button`}
+    onClick={() => logout()}
+  >
+    Sign Out
+  </Link>
+}
+
+```
+
 ### API
+
+#### Callback
 
 `routes/auth/callback.js|ts`:
 
@@ -149,6 +188,18 @@ export default function Root() {
 import fn from '@zentered/auth0-solid-start/api/callback'
 
 export async function GET({ request }) {
+  return fn(request)
+}
+```
+
+#### Logout API
+
+`routes/auth/logout.js|ts`:
+
+```js
+import fn from '@zentered/auth0-solid-start/api/logout'
+
+export function GET({ request }) {
   return fn(request)
 }
 ```

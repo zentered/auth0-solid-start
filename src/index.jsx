@@ -15,6 +15,7 @@ export function Auth0(props) {
     'clientId',
     'audience',
     'redirectUri',
+    'logoutUrl',
     'organization'
   ])
   const cookies = !isServer ? document.cookie : null
@@ -37,6 +38,7 @@ export function Auth0(props) {
     clientID: auth0config.clientId,
     audience: auth0config.audience,
     redirectUri: auth0config.redirectUri,
+    logoutUrl: auth0config.logoutUrl,
     responseType: 'code'
   }
 
@@ -110,12 +112,14 @@ export function Auth0(props) {
           }
         },
         async logout() {
-          const session = await storage.getSession(cookies)
-          return redirect('/login', {
-            headers: {
-              'Set-Cookie': await storage.destroySession(session)
-            }
+          if (process.env.DEBUG) {
+            console.log('Logging out...')
+          }
+          const logoutUrl = await webAuthn.logout({
+            returnTo: auth0config.logoutUrl,
+            clientID: auth0config.clientId
           })
+          await redirect(logoutUrl)
         }
       }}
     >
