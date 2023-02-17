@@ -38,7 +38,8 @@ export function Auth0(props) {
     clientID: auth0config.clientId,
     audience: auth0config.audience,
     redirectUri: auth0config.redirectUri,
-    logoutUrl: auth0config.logoutUrl,
+    logoutUrl:
+      auth0config.logoutUrl || `${process.env.VITE_BASE_URL}/auth/logout`,
     responseType: 'code'
   }
 
@@ -112,9 +113,6 @@ export function Auth0(props) {
           }
         },
         async logout() {
-          if (process.env.DEBUG) {
-            console.log('Logging out...')
-          }
           const logoutUrl = await webAuthn.logout({
             returnTo: auth0config.logoutUrl,
             clientID: auth0config.clientId
