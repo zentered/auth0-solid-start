@@ -6,7 +6,7 @@ export default async function get() {
   const headers = new Headers()
   const session = await storage.getSession()
   headers.append('Content-Type', 'text/html; charset=utf-8')
-  headers.append('Set-Cookie', await storage.commitSession(session))
+  headers.append('Set-Cookie', await storage.destroySession(session))
 
   const body = `<html>
   <head>
