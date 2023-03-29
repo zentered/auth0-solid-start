@@ -1,5 +1,11 @@
 # Auth0 Solid Start (SSR compatible)
 
+<p align="center">
+  <img src=".github/assets/auth0-solid-start.jpg">
+</p>
+
+[![Publish](https://github.com/zentered/auth0-solid-start/actions/workflows/publish.yml/badge.svg)](https://github.com/zentered/auth0-solid-start/actions/workflows/publish.yml)
+
 This is a fully functional library to add [Auth0](https://auth0.com) OAuth
 Authentication to a [Solid-Start](https://github.com/solidjs/solid-start) App.
 
