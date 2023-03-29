@@ -1,6 +1,6 @@
 {
   "name": "@zentered/auth0-solid-start",
-  "version": "1.0.0",
+  "version": "0.0.1-dev",
   "private": false,
   "description": "Auth0 for Solid-Start",
   "keywords": [
@@ -34,7 +34,22 @@
     "src"
   ],
   "scripts": {
+    "lint": "eslint --fix . --ext .js --ext .jsx",
+    "prepare": "husky install",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{js,md}": [
+      "prettier --write"
+    ],
+    "*.{js,jsx}": [
+      "eslint --cache --fix"
+    ]
   },
   "release": {
     "branches": [
@@ -42,25 +57,24 @@
     ]
   },
   "dependencies": {
-    "auth0-js": "^9.20.1",
-    "jose": "^4.12.0"
+    "auth0-js": "^9.20.2",
+    "jose": "^4.13.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.4.3",
-    "@commitlint/config-conventional": "^17.4.3",
-    "@solidjs/router": "^0.7.0",
+    "@commitlint/cli": "^17.5.1",
+    "@commitlint/config-conventional": "^17.4.4",
+    "@solidjs/router": "^0.8.2",
     "dotenv": "^16.0.3",
-    "eslint": "^8.34.0",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-json": "^3.1.0",
+    "eslint": "^8.37.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-markdown": "^3.0.0",
-    "eslint-plugin-solid": "^0.9.4",
+    "eslint-plugin-solid": "^0.12.0",
     "husky": "^8.0.3",
     "is-ci": "^3.0.1",
-    "lint-staged": "^13.1.2",
-    "prettier": "^2.8.4",
-    "solid-js": "^1.6.11",
-    "solid-start": "^0.2.21"
+    "lint-staged": "^13.2.0",
+    "prettier": "^2.8.7",
+    "solid-js": "^1.6.16",
+    "solid-start": "^0.2.24"
   },
   "peerDependencies": {
     "@solidjs/router": "^0.7.0",
@@ -68,6 +82,6 @@
     "solid-start": "^0.2.21"
   },
   "engines": {
-    "node": ">16"
+    "node": "^18"
   }
 }

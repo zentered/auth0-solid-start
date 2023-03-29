@@ -8,8 +8,7 @@
     "eslint:recommended",
     "prettier",
     "plugin:solid/recommended",
-    "plugin:markdown/recommended",
-    "plugin:json/recommended"
+    "plugin:markdown/recommended"
   ],
   "parserOptions": {
     "ecmaFeatures": {

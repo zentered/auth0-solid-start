@@ -28,7 +28,7 @@ export function Auth0(props) {
   const [organization, setOrganization] = createSignal()
 
   const scopes = ['openid', 'profile']
-  if (process.env.VITE_AUTH0_OFFLINE_ACCESS === 'true') {
+  if (import.meta.env.VITE_AUTH0_OFFLINE_ACCESS === 'true') {
     scopes.push('offline_access')
   }
 
@@ -39,7 +39,7 @@ export function Auth0(props) {
     audience: auth0config.audience,
     redirectUri: auth0config.redirectUri,
     logoutUrl:
-      auth0config.logoutUrl || `${process.env.VITE_BASE_URL}/auth/logout`,
+      auth0config.logoutUrl || `${import.meta.env.VITE_BASE_URL}/auth/logout`,
     responseType: 'code'
   }
 

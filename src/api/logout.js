@@ -1,6 +1,6 @@
 import { storage } from '../session.js'
 
-const baseUrl = process.env.VITE_BASE_URL
+const baseUrl = import.meta.env.VITE_BASE_URL
 
 export default async function get() {
   const headers = new Headers()
