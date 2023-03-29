@@ -6,8 +6,8 @@ import { createCookieSessionStorage } from 'solid-start/session'
 let sessionSecret
 if (import.meta && import.meta.env.VITE_SESSION_SECRET) {
   sessionSecret = import.meta.env.VITE_SESSION_SECRET
-} else if (process && process.env.VITE_SESSION_SECRET) {
-  sessionSecret = process.env.VITE_SESSION_SECRET
+} else if (process && import.meta.env.VITE_SESSION_SECRET) {
+  sessionSecret = import.meta.env.VITE_SESSION_SECRET
 } else {
   sessionSecret = 'dev-secret-session-123'
 }

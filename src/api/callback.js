@@ -2,7 +2,9 @@ import { storage } from '../session.js'
 import { parseCookie } from 'solid-start/session'
 
 async function auth0UserInfo(accessToken) {
-  const endpoint = new URL(`https://${process.env.VITE_AUTH0_DOMAIN}/userinfo`)
+  const endpoint = new URL(
+    `https://${import.meta.env.VITE_AUTH0_DOMAIN}/userinfo`
+  )
 
   const userInfo = await fetch(endpoint, {
     method: 'GET',
@@ -20,17 +22,17 @@ async function auth0UserInfo(accessToken) {
 
 async function auth0FetchOAuthToken(code, state, redirectUrl, organization) {
   const endpoint = new URL(
-    `https://${process.env.VITE_AUTH0_DOMAIN}/oauth/token`
+    `https://${import.meta.env.VITE_AUTH0_DOMAIN}/oauth/token`
   )
 
   const scopes = ['openid', 'profile']
-  if (process.env.VITE_AUTH0_OFFLINE_ACCESS === 'true') {
+  if (import.meta.env.VITE_AUTH0_OFFLINE_ACCESS === 'true') {
     scopes.push('offline_access')
   }
 
   const formData = new URLSearchParams()
   formData.append('grant_type', 'authorization_code')
-  formData.append('client_id', process.env.VITE_AUTH0_CLIENT_ID)
+  formData.append('client_id', import.meta.env.VITE_AUTH0_CLIENT_ID)
   formData.append('client_secret', process.env.AUTH0_CLIENT_SECRET)
   formData.append('code', code)
   formData.append('state', state)
@@ -41,8 +43,8 @@ async function auth0FetchOAuthToken(code, state, redirectUrl, organization) {
     formData.append('organization', organization)
   }
 
-  if (process.env.VITE_AUTH0_AUDIENCE) {
-    formData.append('audience', process.env.VITE_AUTH0_AUDIENCE)
+  if (import.meta.env.VITE_AUTH0_AUDIENCE) {
+    formData.append('audience', import.meta.env.VITE_AUTH0_AUDIENCE)
   }
 
   if (process.env.DEBUG) {
@@ -59,7 +61,7 @@ async function auth0FetchOAuthToken(code, state, redirectUrl, organization) {
 }
 
 export default async function get(request) {
-  let baseUrl = process.env.VITE_BASE_URL
+  let baseUrl = import.meta.env.VITE_BASE_URL
   if (process.env.DEBUG) {
     console.log('baseUrl', baseUrl)
   }
@@ -102,11 +104,14 @@ export default async function get(request) {
     )
   }
 
-  let redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI
-  if (process.env.VITE_AUTH0_REWRITE_REDIRECT === 'true') {
+  let redirectUrl = import.meta.env.VITE_AUTH0_REDIRECT_URI
+  if (import.meta.env.VITE_AUTH0_REWRITE_REDIRECT === 'true') {
     const orgName = url.hostname.split('.')[0]
-    redirectUrl = process.env.VITE_AUTH0_REDIRECT_URI.replace('org_id', orgName)
-    baseUrl = process.env.VITE_BASE_URL.replace(
+    redirectUrl = import.meta.env.VITE_AUTH0_REDIRECT_URI.replace(
+      'org_id',
+      orgName
+    )
+    baseUrl = import.meta.env.VITE_BASE_URL.replace(
       'https://',
       `https://${orgName}.`
     )
