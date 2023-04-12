@@ -16,7 +16,8 @@ export function Auth0(props) {
     'audience',
     'redirectUri',
     'logoutUrl',
-    'organization'
+    'organization',
+    'invitation'
   ])
   const cookies = !isServer ? document.cookie : null
 
@@ -57,6 +58,11 @@ export function Auth0(props) {
         isAuthenticated: () => !!isAuthenticated(),
         isInitialized: () => isAuthenticated() !== undefined,
         organization,
+        setInvitation: (invitation, org, orgName) => {
+          webAuthn.baseOptions.invitation = invitation
+          webAuthn.baseOptions.organization = org
+          webAuthn.baseOptions.ogranization_name = orgName
+        },
         user,
         userId,
         idToken,

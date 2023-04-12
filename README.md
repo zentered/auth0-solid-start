@@ -150,6 +150,25 @@ export default function Root() {
 }
 ```
 
+### With Organization Invitation
+
+If you use Auth0 Organizations, you can pass through the `invitation`,
+`organization` and `organization_name` query params to the Auth0 Universal Login
+Experience. This will load the sign-up instead of the login form:
+
+```jsx
+// root.jsx/tsx
+const [searchParams] = useSearchParams()
+
+if (searchParams.invitation) {
+  auth0.setInvitation(
+    searchParams.invitation,
+    searchParams.organization,
+    searchParams.organization_name
+  )
+}
+```
+
 ### Logout
 
 The logout happens in 3 steps:
