@@ -57,31 +57,31 @@
     ]
   },
   "dependencies": {
-    "auth0-js": "^9.20.2",
-    "jose": "^4.13.1"
+    "auth0-js": "^9.21.0",
+    "jose": "^4.14.4"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.5.1",
-    "@commitlint/config-conventional": "^17.4.4",
+    "@commitlint/cli": "^17.6.3",
+    "@commitlint/config-conventional": "^17.6.3",
     "@solidjs/router": "^0.8.2",
     "dotenv": "^16.0.3",
-    "eslint": "^8.38.0",
+    "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-markdown": "^3.0.0",
-    "eslint-plugin-solid": "^0.12.0",
+    "eslint-plugin-solid": "^0.12.1",
     "husky": "^8.0.3",
     "is-ci": "^3.0.1",
-    "lint-staged": "^13.2.1",
-    "prettier": "^2.8.7",
-    "solid-js": "^1.7.3",
+    "lint-staged": "^13.2.2",
+    "prettier": "^2.8.8",
+    "solid-js": "^1.7.5",
     "solid-start": "^0.2.26"
   },
   "peerDependencies": {
-    "@solidjs/router": "^0.7.0",
-    "solid-js": "^1.6.11",
-    "solid-start": "^0.2.21"
+    "@solidjs/router": "^0.8.2",
+    "solid-js": "^1.7.5",
+    "solid-start": "^0.2.26"
   },
   "engines": {
-    "node": "^18"
+    "node": ">18"
   }
 }
