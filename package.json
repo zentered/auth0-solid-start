@@ -30,6 +30,7 @@
     "./api/*": "./src/api/*"
   },
   "main": "src/index.js",
+  "types": "./src/index.d.ts",
   "files": [
     "src"
   ],
@@ -64,6 +65,7 @@
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
     "@solidjs/router": "^0.8.2",
+    "@types/auth0-js": "^9.14.7",
     "dotenv": "^16.0.3",
     "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",
@@ -72,14 +74,12 @@
     "husky": "^8.0.3",
     "is-ci": "^3.0.1",
     "lint-staged": "^13.2.2",
-    "prettier": "^2.8.8",
-    "solid-js": "^1.7.5",
-    "solid-start": "^0.2.26"
+    "prettier": "^2.8.8"
   },
   "peerDependencies": {
-    "@solidjs/router": "^0.8.2",
-    "solid-js": "^1.7.5",
-    "solid-start": "^0.2.26"
+    "@solidjs/router": "0.x",
+    "solid-js": "1.x",
+    "solid-start": "0.x"
   },
   "engines": {
     "node": ">=18"

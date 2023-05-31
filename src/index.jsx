@@ -23,9 +23,9 @@ export function Auth0(props) {
 
   const [isAuthenticated, setIsAuthenticated] = createSignal(undefined)
   const [user, setUser] = createSignal()
-  const [accessToken, setAccessToken] = createSignal()
-  const [idToken, setIdToken] = createSignal()
-  const [userId, setUserId] = createSignal()
+  const [accessToken, setAccessToken] = createSignal('')
+  const [idToken, setIdToken] = createSignal('')
+  const [userId, setUserId] = createSignal('')
   const [organization, setOrganization] = createSignal()
 
   const scopes = ['openid', 'profile']
@@ -33,7 +33,7 @@ export function Auth0(props) {
     scopes.push('offline_access')
   }
 
-  const webAuthnConfig = {
+  const webAuth0Config = {
     _sendTelemetry: false,
     domain: auth0config.domain,
     clientID: auth0config.clientId,
@@ -46,10 +46,10 @@ export function Auth0(props) {
 
   if (auth0config.organization) {
     setOrganization(auth0config.organization)
-    webAuthnConfig.organization = auth0config.organization.id
+    webAuth0Config.organization = auth0config.organization.id
   }
 
-  const webAuthn = new auth0.WebAuth(webAuthnConfig)
+  const webAuthn = new auth0.WebAuth(webAuth0Config)
 
   return (
     <Auth0Context.Provider
