@@ -8,6 +8,13 @@ declare module '@zentered/auth0-solid-start/api/logout' {
   export default function (req: APIEvent['request']): void
 }
 
+declare module '@zentered/auth0-solid-start/server' {
+  import type { ServerFunctionEvent } from 'solid-start/server'
+  import type { Session } from 'solid-start/session/sessions'
+
+  export function getSession(event: ServerFunctionEvent): Promise<Session>
+}
+
 declare module '@zentered/auth0-solid-start' {
   import { Accessor, JSX } from 'solid-js'
   import type { WebAuth } from 'auth0-js'
