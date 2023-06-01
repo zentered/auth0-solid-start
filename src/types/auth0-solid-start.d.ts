@@ -11,20 +11,18 @@ declare module '@zentered/auth0-solid-start/api/logout' {
 declare module '@zentered/auth0-solid-start/server' {
   import type { ServerFunctionEvent } from 'solid-start/server'
   import type { Session } from 'solid-start/session/sessions'
-
+  export type { SessionData } from 'solid-start/session/sessions'
   export function getSession(event: ServerFunctionEvent): Promise<Session>
 }
 
 declare module '@zentered/auth0-solid-start' {
   import { Accessor, JSX } from 'solid-js'
+  import { SessionData } from 'solid-start/session/sessions'
   import type { WebAuth } from 'auth0-js'
-  export type { SessionData } from 'solid-start/session/sessions'
+
+  export type UserInfo = SessionData['userInfo']
 
   type Organization = { id: string }
-
-  export interface User {
-    [name: string]: unknown
-  }
 
   type Auth0Context = {
     auth0Client: WebAuth
@@ -32,7 +30,7 @@ declare module '@zentered/auth0-solid-start' {
     isInitialized: () => boolean
     organization: Accessor<Organization>
     setInvitation: (invitation: string, org: string, orgName: string) => void
-    user: Accessor<User>
+    user: Accessor<SessionData['userInfo']>
     userId: Accessor<string>
     idToken: Accessor<string>
     accessToken: Accessor<string>
