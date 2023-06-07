@@ -28,7 +28,7 @@ export function Auth0(props) {
   const [userId, setUserId] = createSignal('')
   const [organization, setOrganization] = createSignal()
 
-  const scopes = ['openid', 'profile']
+  const scopes = ['openid', 'profile', 'email']
   if (import.meta.env.VITE_AUTH0_OFFLINE_ACCESS === 'true') {
     scopes.push('offline_access')
   }

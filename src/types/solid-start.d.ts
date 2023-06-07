@@ -8,6 +8,8 @@ declare module 'solid-start/session/sessions' {
     picture: string
     updated_at: string
     org_id: string
+    email: string
+    email_verified: boolean
   }
 
   /*
