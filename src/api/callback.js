@@ -30,6 +30,10 @@ async function auth0FetchOAuthToken(code, state, redirectUrl, organization) {
     scopes.push('offline_access')
   }
 
+  if (import.meta.env.VITE_AUTH0_PERMISSIONS === 'true') {
+    scopes.push('permissions')
+  }
+
   const formData = new URLSearchParams()
   formData.append('grant_type', 'authorization_code')
   formData.append('client_id', import.meta.env.VITE_AUTH0_CLIENT_ID)
