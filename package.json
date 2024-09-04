@@ -73,7 +73,7 @@
     "eslint-plugin-solid": "^0.13.0",
     "husky": "^8.0.3",
     "is-ci": "^3.0.1",
-    "lint-staged": "^13.3.0",
+    "lint-staged": "^15.2.9",
     "prettier": "^2.8.8"
   },
   "peerDependencies": {
