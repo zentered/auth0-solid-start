@@ -1,4 +1,11 @@
-# Auth0 Solid Start (SSR compatible)
+# Auth0 Solid Start (SSR compatible) [DEPRECATED]
+
+## Deprecation Notice
+
+I don't have the time to maintain this module any longer. If you're interested in taking over, please let me know.
+
+In the meantime, [Auth.js](https://authjs.dev/reference/solid-start) seems like a good solution.
+
 
 <p align="center">
   <img src=".github/assets/auth0-solid-start.jpg">
